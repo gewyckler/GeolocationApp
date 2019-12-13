@@ -1,15 +1,19 @@
-import javax.swing.*;
-import java.awt.*;
+import org.jxmapviewer.JXMapViewer;
 
-public class LocationMap extends JFrame {
+import javax.swing.*;
+
+public class LocationMap extends JXMapViewer {
     private JButton okButton;
     private JPanel rootPanel;
 
-    public LocationMap() throws HeadlessException {
+
+    public LocationMap() {
         add(rootPanel);
         add(okButton);
 
-        setTitle("MyFrame");
-        setSize(800, 600);
+    }
+
+    public static LocationMap runJframeAndMap() {
+        return new LocationMap();
     }
 }

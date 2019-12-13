@@ -4,29 +4,25 @@ import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.*;
 
-import javax.swing.*;
 import java.util.*;
 
 public class Main {
+
     public static void main(String[] args) {
-//        LocationMap locationMap = new LocationMap();
-//        locationMap.setVisible(true);
+//      Display the viewer in a JFrame
 
-        JXMapViewer mapViewer = new JXMapViewer();
+        // Creating JFrame
+        Map map = new Map();
+        map.createJframe();
 
-//         Display the viewer in a JFrame
 
-        JFrame frame = new JFrame("JXMapviewer2 Example 2");
-        frame.getContentPane().add(mapViewer);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("MyFrame");
-        frame.setSize(800, 600);
-        frame.setVisible(true);
+        // Read Json from file and transform into Object named Employee
+        List<Employee> employeeList = EmployeeFromFile.loadContentFromFile();
 
         // Create a TileFactoryInfo for OpenStreetMap
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
-        mapViewer.setTileFactory(tileFactory);
+        map.getMapViewer().setTileFactory(tileFactory);
 
         GeoPosition gdansk = new GeoPosition(54, 22, 19, 18, 38, 17);
         GeoPosition bytow = new GeoPosition(54, 10, 14, 17, 29, 29);
@@ -37,7 +33,7 @@ public class Main {
         RoutePainter routePainter = new RoutePainter(track);
 
         // Set the focus
-        mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
+        map.getMapViewer().zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
 
         // Create waypoints from the geo-positions
         Set<Waypoint> waypoints = new HashSet<Waypoint>(Arrays.asList(
@@ -54,7 +50,7 @@ public class Main {
         painters.add(waypointPainter);
 
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
-        mapViewer.setOverlayPainter(painter);
+        map.getMapViewer().setOverlayPainter(painter);
     }
 
 //    public static GeoPosition getCoordinates(){
