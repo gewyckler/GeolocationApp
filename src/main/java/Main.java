@@ -15,9 +15,7 @@ public class Main {
         locMap.createMap();
 
         // Read Json from file and transform into Object named Employee
-        List<Employee> employeeList = EmployeeFromFile.loadContentFromFile();
-        System.out.println(employeeList);
-
+        Employees employees = EmployeeFromFile.loadContentFromFile();
         // Create a TileFactoryInfo for OpenStreetMap
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);

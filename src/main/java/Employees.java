@@ -1,11 +1,16 @@
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Employees extends Employee {
-    private List<Employee> employees = new ArrayList<>();
+@Getter
+public class Employees {
+    private List<Employee> employee = new ArrayList<>();
 
-
+    @Override
+    public String toString() {
+        return employee + "\n";
+    }
 }

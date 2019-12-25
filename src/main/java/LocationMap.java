@@ -3,38 +3,48 @@ import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @Getter
-public class LocationMap {
-    private JPanel rootPanel = new JPanel();
-    private JList<Employees> employeeList = new JList<>();
-    private DefaultListModel<Employees> model = new DefaultListModel<>();
-    private JSplitPane split = new JSplitPane();
+public class LocationMap extends JFrame {
+    private JPanel rootPanel;
+    private JList employeesJList;
+    private JButton LdBtn;
+    private DefaultListModel model = new DefaultListModel();
+    private Employees employees = EmployeeFromFile.loadContentFromFile();
 
     private JXMapViewer mapViewer = new JXMapViewer();
 
+    public LocationMap() {
+        LdBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(employees.getEmployee().size());
+                for (Employee emp : employees.getEmployee()) {
+                    model.addElement(emp);
+                }
+                employeesJList.setModel(model);
+            }
+        });
+    }
+
     public JFrame createMap() {
         JFrame jFrame = new JFrame("JXMapviewer2 Example 2");
-        employeeList.setModel(model);
-//        model.addElement();
-        split.setRightComponent(employeeList);
-        split.setLeftComponent(mapViewer);
+        employeesJList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        employees = EmployeeFromFile.loadContentFromFile();
+
+        jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jFrame.setTitle("Forest Tracker");
         jFrame.pack();
-        jFrame.setVisible(true);
         jFrame.setSize(700, 500);
+        jFrame.setVisible(true);
 
         mapViewer.setSize(500, 500);
         jFrame.getContentPane().add(this.mapViewer);
-
-        rootPanel.setSize(700, 500);
-        rootPanel.setBackground(Color.red);
+        rootPanel.setBackground(Color.gray);
         jFrame.getContentPane().add(this.rootPanel);
-
-
-        jFrame.add(new LocationMap().rootPanel);
         return jFrame;
     }
 }
