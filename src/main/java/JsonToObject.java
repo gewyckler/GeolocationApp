@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class JsonToObject {
-    private final static String path = "C:\\Users\\Filip\\Desktop\\test_sd_card\\config\\employees.json";
+//    private final static String path = "C:\\Users\\Filip\\Desktop\\test_sd_card\\config\\employees.txt";
 
-    public static Employees loadContentFromFile() {
+    public static Employees loadContentFromFile(String path) {
         Gson gson = new Gson();
         Employees employees = null;
 

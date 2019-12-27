@@ -16,7 +16,6 @@ public class Main {
 
         // Read Json from file and transform into Object named model.Employee
         JsonToObject jsonParser = new JsonToObject();
-        jsonParser.loadContentFromFile();
         // Create a TileFactoryInfo for OpenStreetMap
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);

@@ -4,28 +4,38 @@ import model.Employees;
 import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @Getter
 public class LocationMap extends JFrame {
-    private Employees employees = JsonToObject.loadContentFromFile();
+    private Employees employees;
     private JPanel rootPanel;
     private JList employeesJList;
     private JButton LdBtn;
     private DefaultListModel model = new DefaultListModel();
-
     private JXMapViewer mapViewer = new JXMapViewer();
 
     public LocationMap() {
         LdBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (Employee emp : employees.getEmployees()) {
-                    model.addElement(emp);
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("txt and json", "txt", "json");
+                fileChooser.setFileFilter(filter);
+                int returnVal = fileChooser.showOpenDialog(getParent());
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    System.out.println("You choose to open this file: " + fileChooser.getSelectedFile().getName());
+                    employees = JsonToObject.loadContentFromFile(fileChooser.getSelectedFile().getPath());
+                    for (Employee emp : employees.getEmployees()) {
+                        System.out.println(emp);
+                        model.addElement(emp);
+                    }
+                    employeesJList.setModel(model);
                 }
-                employeesJList.setModel(model);
+
             }
         });
     }
