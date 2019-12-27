@@ -1,4 +1,6 @@
 import lombok.Getter;
+import model.Employee;
+import model.Employees;
 import org.jxmapviewer.JXMapViewer;
 
 import javax.swing.*;
@@ -8,11 +10,11 @@ import java.awt.event.ActionListener;
 
 @Getter
 public class LocationMap extends JFrame {
+    private Employees employees = JsonToObject.loadContentFromFile();
     private JPanel rootPanel;
     private JList employeesJList;
     private JButton LdBtn;
     private DefaultListModel model = new DefaultListModel();
-    private Employees employees = EmployeeFromFile.loadContentFromFile();
 
     private JXMapViewer mapViewer = new JXMapViewer();
 
@@ -20,8 +22,7 @@ public class LocationMap extends JFrame {
         LdBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(employees.getEmployee().size());
-                for (Employee emp : employees.getEmployee()) {
+                for (Employee emp : employees.getEmployees()) {
                     model.addElement(emp);
                 }
                 employeesJList.setModel(model);
@@ -33,7 +34,7 @@ public class LocationMap extends JFrame {
         JFrame jFrame = new JFrame("JXMapviewer2 Example 2");
         employeesJList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        employees = EmployeeFromFile.loadContentFromFile();
+//        employees = employees.loadContentFromFile();
 
         jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jFrame.setTitle("Forest Tracker");
