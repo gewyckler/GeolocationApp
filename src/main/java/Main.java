@@ -10,12 +10,10 @@ public class Main {
     public static void main(String[] args) {
 //      Display the viewer in a JFrame
 
-        // Creating JFrame
+        // Creating JFrame with OSM map
         LocationMap locMap = new LocationMap();
         locMap.createMap();
 
-        // Read Json from file and transform into Object named model.Employee
-        JsonToObject jsonParser = new JsonToObject();
         // Create a TileFactoryInfo for OpenStreetMap
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
