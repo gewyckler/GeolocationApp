@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class Events {
-    private String workerId;
+    private String eventDate;
     private List<String> eventsist;
 
 

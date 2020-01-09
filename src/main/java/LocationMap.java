@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 @Getter
 public class LocationMap extends JFrame {
     private Employees employees;
@@ -17,7 +18,6 @@ public class LocationMap extends JFrame {
     private JPanel rootPanel;
     private JList employeesJList;
     private JButton LdBtn;
-    private JButton Load_Events_Btn;
     private DefaultListModel model = new DefaultListModel();
     private JXMapViewer mapViewer = new JXMapViewer();
 
@@ -28,29 +28,21 @@ public class LocationMap extends JFrame {
         LdBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String idFilePath;
+                String employeesFilePath;
+
                 int returnVal = openWindowDialog();
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    employees = LoadFromFile.loadJsonToJavaObject(fileChooser.getSelectedFile().getPath());
+                    employeesFilePath = fileChooser.getSelectedFile().getPath(); // D:\java\GeolocationApp\test_sd_card\config\employees.txt
+                    idFilePath = employeesFilePath.trim().replace("employees.txt", "id.txt"); // D:\java\GeolocationApp\test_sd_card\config\id.txt
+
+                    employees = LoadFromFile.loadJsonToJavaObject(employeesFilePath, idFilePath);
+
                     for (Employee emp : employees.getEmployees()) {
                         System.out.println(emp);
                         model.addElement(emp);
                     }
-                    employeesJList.setModel(model);
-                }
 
-            }
-        });
-        Load_Events_Btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int returnVal = openWindowDialog();
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    int position = fileChooser.getSelectedFile().getParent().length() - 1;
-                    events = LoadFromFile.loadTextFromFileByLine(fileChooser.getSelectedFile().getPath(),
-                            fileChooser.getSelectedFile().getParent().substring(position));
-                    for (String line : events.getEventsist()) {
-                        model.addElement(line);
-                    }
                     employeesJList.setModel(model);
                 }
             }
