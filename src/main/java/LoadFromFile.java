@@ -23,10 +23,12 @@ public class LoadFromFile {
         }
 
         List<String> realIdList = readFileByLineAndLoadToList(idFilePath);
-        for (int i = 0; i < employees.getEmployees().size() - 1; i++) {
-            for (int j = 0; j < realIdList.size() - 1; j++) {
+        for (int i = 0; i < employees.getEmployees().size(); i++) {
+            for (int j = 0; j < realIdList.size(); j++) {
                 if (realIdList.get(j).substring(0, 1).equals(String.valueOf(employees.getEmployees().get(i).getId()))) {
                     employees.getEmployees().get(i).setWorkerNumber(realIdList.get(j).substring(2));
+                    System.out.println("Przypisano!");
+                    break;
                 }
             }
         }
@@ -37,10 +39,12 @@ public class LoadFromFile {
     private static List<String> readFileByLineAndLoadToList(String filePath) {
         List<String> list = new ArrayList<>();
         try (BufferedReader bf = new BufferedReader(new FileReader(filePath))) {
-            String line = bf.readLine();
+            String line = "";
             while (line != null) {
                 line = bf.readLine();
-                list.add(line);
+                if (line != null) {
+                    list.add(line);
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

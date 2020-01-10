@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 public class Employees {
-    @Expose(serialize = false)
+    @Expose/*(serialize = false)*/
     private List<Employee> employees;
 
     @Override
