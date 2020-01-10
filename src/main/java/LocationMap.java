@@ -30,13 +30,15 @@ public class LocationMap extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String idFilePath;
                 String employeesFilePath;
+                String eventFolderPath;
 
                 int returnVal = openWindowDialog();
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     employeesFilePath = fileChooser.getSelectedFile().getPath(); // D:\java\GeolocationApp\test_sd_card\config\employees.txt
                     idFilePath = employeesFilePath.trim().replace("employees.txt", "id.txt"); // D:\java\GeolocationApp\test_sd_card\config\id.txt
+                    eventFolderPath = employeesFilePath.trim().replace("config\\employees.txt", "logs\\"); // D:\java\GeolocationApp\test_sd_card\logs
 
-                    employees = LoadFromFile.loadJsonToJavaObject(employeesFilePath, idFilePath);
+                    employees = LoadFromFile.loadJsonToJavaObject(employeesFilePath, idFilePath, eventFolderPath);
 
                     for (Employee emp : employees.getEmployees()) {
                         System.out.println(emp);

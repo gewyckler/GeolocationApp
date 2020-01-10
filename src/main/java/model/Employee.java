@@ -19,7 +19,7 @@ public class Employee {
     private Long id;
 
     private String workerNumber;
-    private List<Events> eventList;
+    private Events events;
 
     @Override
     public String toString() {
