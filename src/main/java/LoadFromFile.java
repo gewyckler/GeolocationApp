@@ -1,6 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.DailyEvents;
+import model.Employee;
 import model.Employees;
 import model.Events;
 
