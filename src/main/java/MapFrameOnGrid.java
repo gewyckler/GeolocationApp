@@ -1,5 +1,4 @@
 import model.Employee;
-import model.Employees;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.PanMouseInputListener;
@@ -21,8 +20,8 @@ public class MapFrameOnGrid extends JFrame {
     private JButton loadBtn;
     private GridBagConstraints constrains = new GridBagConstraints();
     private JFileChooser fileChooser = new JFileChooser();
-    private JList listOfEmp;
-    private DefaultListModel<List<Employee>> listOfEmpModel = new DefaultListModel<>();
+    private JList<List<Employee>> listOfEmp;
+    private DefaultListModel<Employee> listOfEmpModel = new DefaultListModel<>();
     private JScrollPane scrollBar;
 
 
@@ -139,10 +138,16 @@ public class MapFrameOnGrid extends JFrame {
                     if (selectedFile.getName().equals("employees.txt")) {
 
                         List<Employee> employeeList = LoadFromFile.loadJsonToJavaObject(selectedFile.getPath(),
-                                selectedFile.getParent().concat("\\id.txt"),
-                                selectedFile.getParent().replace("config", "logs\\"));
+                                selectedFile.getParent()
+                                        .concat("\\id.txt"),
+                                selectedFile
+                                        .getParent()
+                                        .replace("config", "logs\\"));
 
-                        listOfEmpModel.addElement(employeeList);
+                        for (int i = 0; i < employeeList.size(); i++) {
+                            listOfEmpModel.addElement(employeeList.get(i));
+                        }
+//                        listOfEmpModel.addElement(employeeList);
                         listOfEmp = new JList(listOfEmpModel);
                         employeeList.forEach(System.out::println);
 
