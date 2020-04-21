@@ -1,11 +1,9 @@
-import com.roots.map.MapPanel;
+import model.Employee;
 import model.Employees;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
-import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.*;
 
 import javax.swing.*;
@@ -17,18 +15,18 @@ import java.io.File;
 import java.util.*;
 import java.util.List;
 
-public class TryingGridLayout extends JFrame {
+public class MapFrameOnGrid extends JFrame {
     private JXMapViewer mapViewer;
 
     private JButton loadBtn;
     private GridBagConstraints constrains = new GridBagConstraints();
     private JFileChooser fileChooser = new JFileChooser();
     private JList listOfEmp;
-    private DefaultListModel<Employees> listOfEmpModel = new DefaultListModel<>();
+    private DefaultListModel<List<Employee>> listOfEmpModel = new DefaultListModel<>();
     private JScrollPane scrollBar;
 
 
-    public TryingGridLayout() {
+    public MapFrameOnGrid() {
         JPanel panel = new JPanel();
 
         this.setTitle("Event Tracker");
@@ -57,7 +55,11 @@ public class TryingGridLayout extends JFrame {
         // Create a TileFactoryInfo for OpenStreetMap
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+        GeoPosition startPoint = new GeoPosition(54, 2, 5, 17, 8, 8);
+        tileFactory.geoToPixel(startPoint, 10);
         mapViewer.setTileFactory(tileFactory);
+        mapViewer.setCenterPosition(startPoint);
+        mapViewer.setZoom(10);
 
         GeoPosition frankfurt = new GeoPosition(50, 7, 0, 8, 41, 0);
         GeoPosition wiesbaden = new GeoPosition(50, 5, 0, 8, 14, 0);
@@ -69,28 +71,29 @@ public class TryingGridLayout extends JFrame {
         java.util.List<GeoPosition> track = Arrays.asList(frankfurt, wiesbaden, mainz, darmstadt, offenbach);
         RoutePainter routePainter = new RoutePainter(track);
 
+        /*  AFTER CLICKING ON EMP IN LIST OF EMP*/
         // Set the focus
-        mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
-
+//        mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 1);
+//        mapViewer.setZoom(8);
         // Create waypoints from the geo-positions
-        Set<Waypoint> waypoints = new HashSet<Waypoint>(Arrays.asList(
-                new DefaultWaypoint(frankfurt),
-                new DefaultWaypoint(wiesbaden),
-                new DefaultWaypoint(mainz),
-                new DefaultWaypoint(darmstadt),
-                new DefaultWaypoint(offenbach)));
+//        Set<Waypoint> waypoints = new HashSet<Waypoint>(Arrays.asList(
+//                new DefaultWaypoint(frankfurt),
+//                new DefaultWaypoint(wiesbaden),
+//                new DefaultWaypoint(mainz),
+//                new DefaultWaypoint(darmstadt),
+//                new DefaultWaypoint(offenbach)));
 
         // Create a waypoint painter that takes all the waypoints
-        WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
-        waypointPainter.setWaypoints(waypoints);
+//        WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
+//        waypointPainter.setWaypoints(waypoints);
 
         // Create a compound painter that uses both the route-painter and the waypoint-painter
-        List<org.jxmapviewer.painter.Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
-        painters.add(routePainter);
-        painters.add(waypointPainter);
+//        List<org.jxmapviewer.painter.Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
+//        painters.add(routePainter);
+//        painters.add(waypointPainter);
 
-        CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
-        mapViewer.setOverlayPainter(painter);
+//        CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
+//        mapViewer.setOverlayPainter(painter);
         ///END OF MAP///
 
         // LOAD BUTTON
@@ -122,7 +125,7 @@ public class TryingGridLayout extends JFrame {
     }
 
     public static void main(String[] args) {
-        new TryingGridLayout();
+        new MapFrameOnGrid();
     }
 
     public class ListenForLoadBtn implements ActionListener {
@@ -135,15 +138,16 @@ public class TryingGridLayout extends JFrame {
                     File selectedFile = fileChooser.getSelectedFile();
                     if (selectedFile.getName().equals("employees.txt")) {
 
-                        Employees employees = LoadFromFile.loadJsonToJavaObject(selectedFile.getPath(),
+                        List<Employee> employeeList = LoadFromFile.loadJsonToJavaObject(selectedFile.getPath(),
                                 selectedFile.getParent().concat("\\id.txt"),
                                 selectedFile.getParent().replace("config", "logs\\"));
 
-                        listOfEmpModel.addElement(employees);
+                        listOfEmpModel.addElement(employeeList);
                         listOfEmp = new JList(listOfEmpModel);
-                        employees.getEmployees().forEach(System.out::println);
+                        employeeList.forEach(System.out::println);
 
                     } else {
+//                        JOptionPane.showMessageDialog(fileChooser, "Zły nie wybrano pliku lub wybrano zły plik");
                         System.out.println("Zły nie wybrano pliku lub wybrano zły plik");
                     }
                 }

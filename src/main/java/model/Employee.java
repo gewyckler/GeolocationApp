@@ -23,7 +23,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return id + ". " + fn + " " + ln + "\n";
+        return id + ". " + fn + " " + ln;
 
     }
 }

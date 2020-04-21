@@ -1,5 +1,4 @@
-{
-   "employees":[
+[
       {
          "fn":"Adam",
          "ln":"Kowalski",
@@ -10,5 +9,4 @@
          "ln":"Nowak",
          "id":3
       }
-   ]
-}
+]

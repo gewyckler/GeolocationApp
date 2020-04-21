@@ -1,12 +1,15 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import model.DailyEvents;
 import model.Employee;
 import model.Employees;
 import model.Events;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*This class allow to read a Json format from file, of path given in parameter, and create an Employees object.*/
@@ -15,34 +18,35 @@ public class LoadFromFile {
             .excludeFieldsWithoutExposeAnnotation()
             .create();
 
-    public static Employees loadJsonToJavaObject(String employeesFilePath, String idFilePath, String eventFolderPath) {
-        Employees employees = new Employees();
-
+    public static List<Employee> loadJsonToJavaObject(String employeesFilePath, String idFilePath, String eventFolderPath) {
+//        Employees employees = new Employees();
+        List<Employee> employeeList = new ArrayList<>();
+// D:\java\GeolocationApp\test_sd_card\config\employees
         try (Reader reader = new FileReader(employeesFilePath)) {
-            employees = gson.fromJson(reader, Employees.class);
+            employeeList = gson.fromJson(reader, new TypeToken<List<Employee>>(){}.getType());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         List<String> realIdList = readFromIdFile(idFilePath);
-        getEmployeesRealId(employees, realIdList);
+        getEmployeesRealId(employeeList, realIdList);
 
         List<Events> eventsList = getEventList(eventFolderPath);
-        getEmployeesEvents(employees, eventsList);
+        getEmployeesEvents(employeeList, eventsList);
 
-        return employees;
+        return employeeList;
     }
 
-    private static Employees getEmployeesEvents(Employees employees, List<Events> eventsList) {
-        for (int i = 0; i < employees.getEmployees().size(); i++) {
+    private static List<Employee> getEmployeesEvents(List<Employee> employeeList, List<Events> eventsList) {
+        for (int i = 0; i < employeeList.size(); i++) {
             for (int j = 0; j < eventsList.size(); j++) {
-                if (eventsList.get(j).getId().equals(employees.getEmployees().get(i).getId())) {
-                    employees.getEmployees().get(i).setEvents(eventsList.get(j));
+                if (eventsList.get(j).getId().equals(employeeList.get(i).getId())) {
+                    employeeList.get(i).setEvents(eventsList.get(j));
                     break;
                 }
             }
         }
-        return employees;
+        return employeeList;
     }
 
     /*Load from folder "logs" folder named by employee id and add events to employee event list*/
@@ -91,16 +95,16 @@ public class LoadFromFile {
     }
 
     /*Load from file "id" list of employees id and asign it to proper objects*/
-    private static Employees getEmployeesRealId(Employees employees, List<String> realIdList) {
-        for (int i = 0; i < employees.getEmployees().size(); i++) {
+    private static List<Employee> getEmployeesRealId(List<Employee> employeeList, List<String> realIdList) {
+        for (int i = 0; i < employeeList.size(); i++) {
             for (int j = 0; j < realIdList.size(); j++) {
-                if (realIdList.get(j).substring(0, 1).equals(String.valueOf(employees.getEmployees().get(i).getId()))) {
-                    employees.getEmployees().get(i).setWorkerNumber(realIdList.get(j).substring(2));
+                if (realIdList.get(j).substring(0, 1).equals(String.valueOf(employeeList.get(i).getId()))) {
+                    employeeList.get(i).setWorkerNumber(realIdList.get(j).substring(2));
                     break;
                 }
             }
         }
-        return employees;
+        return employeeList;
     }
 
     private static List<String> readFromIdFile(String filePath) {
