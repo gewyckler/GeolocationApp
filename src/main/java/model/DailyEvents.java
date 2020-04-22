@@ -1,6 +1,6 @@
 package model;
 
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
@@ -8,4 +8,10 @@ import java.util.List;
 public class DailyEvents {
     private String eventDate;
     private List<String> descriptions;
+
+    @Override
+    public String toString() {
+        return "" + eventDate;
+    }
 }
+

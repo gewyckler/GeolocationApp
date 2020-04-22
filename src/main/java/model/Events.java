@@ -8,6 +8,4 @@ import java.util.List;
 public class Events {
     private Long id;
     private List<DailyEvents> dailyEventsList;
-
-
 }

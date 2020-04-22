@@ -1,4 +1,6 @@
+import model.DailyEvents;
 import model.Employee;
+import model.Events;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.input.PanMouseInputListener;
@@ -6,10 +8,12 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.viewer.*;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.File;
 import java.util.*;
 import java.util.List;
@@ -20,9 +24,10 @@ public class MapFrameOnGrid extends JFrame {
     private JButton loadBtn;
     private GridBagConstraints constrains = new GridBagConstraints();
     private JFileChooser fileChooser = new JFileChooser();
-    private JList<List<Employee>> listOfEmp;
     private DefaultListModel<Employee> listOfEmpModel = new DefaultListModel<>();
-    private JScrollPane scrollBar;
+    private JList<Employee> listOfEmp = new JList<>();
+    private DefaultListModel<DailyEvents> listOfEventsModel = new DefaultListModel<>();
+    private JList<DailyEvents> listOfEvents = new JList<>();
 
 
     public MapFrameOnGrid() {
@@ -96,11 +101,11 @@ public class MapFrameOnGrid extends JFrame {
         ///END OF MAP///
 
         // LOAD BUTTON
-        loadBtn = new JButton("Load...");
+        loadBtn = new JButton("Load \n 'employees.txt'");
         loadBtn.addActionListener(new ListenForLoadBtn());
         constrains.gridx = 6;
         constrains.gridy = 0;
-        constrains.gridwidth = 3;
+        constrains.gridwidth = 2;
         constrains.gridheight = 1;
         constrains.weightx = 0.07;
         constrains.weighty = 0;
@@ -108,23 +113,89 @@ public class MapFrameOnGrid extends JFrame {
 
         // LIST OF EMPLOYEES
 //        String[] asd = {"qdasdwedasdasd", "awe", "awe", "awe", "awe", "awe"};
-        scrollBar = new JScrollPane(listOfEmp);
-        listOfEmp = new JList(listOfEmpModel);
+        JScrollPane empScrollBar = new JScrollPane();
+        empScrollBar.setViewportView(listOfEmp);
+        listOfEmp.setLayoutOrientation(JList.VERTICAL);
+        this.add(empScrollBar);
+
+        listOfEmp.setBorder(new EmptyBorder(10, 10, 0, 10));
+        listOfEmp.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listOfEmp.addMouseListener(new ListenForEmpList());
         constrains.gridx = 6;
         constrains.gridy = 1;
-        constrains.gridwidth = 3;
+        constrains.gridwidth = 2;
         constrains.gridheight = 1;
-//        constrains.weightx = 0.07;
-        constrains.weighty = 1;
-        constrains.fill = GridBagConstraints.VERTICAL;
+//        constrains.weightx = 0;
+//        constrains.weighty = 0;
+        constrains.fill = GridBagConstraints.HORIZONTAL;
         this.add(listOfEmp, constrains);
 
+        // LIST OF EVENTS
+        JScrollPane eventScrollBar = new JScrollPane();
+        eventScrollBar.setViewportView(listOfEvents);
+        listOfEvents.setLayoutOrientation(JList.VERTICAL);
+        this.add(eventScrollBar);
+
+        listOfEvents.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        listOfEvents.setBorder(new EmptyBorder(10, 10, 0, 10));
+        listOfEvents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listOfEvents.addListSelectionListener(new ListenForEventList());
+        constrains.gridx = 6;
+        constrains.gridy = 3;
+        constrains.gridwidth = 2;
+        constrains.gridheight = 1;
+//        constrains.weightx = 0;
+//        constrains.weighty = 0;
+        constrains.fill = GridBagConstraints.HORIZONTAL;
+        this.add(listOfEvents, constrains);
 
         this.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new MapFrameOnGrid();
+    public class ListenForEmpList implements MouseListener {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            Employee selectedValue = listOfEmp.getSelectedValue();
+            if (e.getClickCount() == 2) {
+                System.out.println("MOUSE CLICKER:\n" + selectedValue);
+                // add selectedItem to your second list.
+                if (listOfEventsModel != null) {
+                    listOfEventsModel = new DefaultListModel();
+                }
+                for (int i = 0; i < selectedValue.getEvents().getDailyEventsList().size(); i++) {
+                    listOfEventsModel.addElement(selectedValue.getEvents().getDailyEventsList().get(i));
+                }
+                listOfEvents.setModel(listOfEventsModel);
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+
+    public class ListenForEventList implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            System.out.println("DUPA");
+        }
     }
 
     public class ListenForLoadBtn implements ActionListener {
@@ -144,16 +215,14 @@ public class MapFrameOnGrid extends JFrame {
                                         .getParent()
                                         .replace("config", "logs\\"));
 
+                        /*Adding employee one by one to listOfEmpModel*/
                         for (int i = 0; i < employeeList.size(); i++) {
                             listOfEmpModel.addElement(employeeList.get(i));
                         }
-//                        listOfEmpModel.addElement(employeeList);
-                        listOfEmp = new JList(listOfEmpModel);
-                        employeeList.forEach(System.out::println);
-
+                        listOfEmp.setModel(listOfEmpModel);
                     } else {
-//                        JOptionPane.showMessageDialog(fileChooser, "Zły nie wybrano pliku lub wybrano zły plik");
-                        System.out.println("Zły nie wybrano pliku lub wybrano zły plik");
+                        JOptionPane.showMessageDialog(fileChooser, "Wybrano zły plik!", "Warning", JOptionPane.WARNING_MESSAGE);
+                        System.out.println("Wybrano zły plik");
                     }
                 }
             }

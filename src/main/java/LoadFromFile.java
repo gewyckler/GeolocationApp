@@ -18,9 +18,7 @@ public class LoadFromFile {
             .create();
 
     public static List<Employee> loadJsonToJavaObject(String employeesFilePath, String idFilePath, String eventFolderPath) {
-//        Employees employees = new Employees();
         List<Employee> employeeList = new ArrayList<>();
-// D:\java\GeolocationApp\test_sd_card\config\employees
         try (Reader reader = new FileReader(employeesFilePath)) {
             employeeList = gson.fromJson(reader, new TypeToken<List<Employee>>(){}.getType());
         } catch (IOException e) {
