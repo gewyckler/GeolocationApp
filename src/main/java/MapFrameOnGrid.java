@@ -22,6 +22,7 @@ public class MapFrameOnGrid extends JFrame {
     private JXMapViewer mapViewer;
 
     private JButton loadBtn;
+    private Dimension dim = new Dimension();
     private GridBagConstraints constrains = new GridBagConstraints();
     private JFileChooser fileChooser = new JFileChooser();
     private DefaultListModel<Employee> listOfEmpModel = new DefaultListModel<>();
@@ -113,11 +114,10 @@ public class MapFrameOnGrid extends JFrame {
 
 
         // LIST OF EMPLOYEES
-        JScrollPane empScrollBar = new JScrollPane();
-        empScrollBar.setViewportView(listOfEmp);
+        JScrollPane empScroll;
+        empScroll = new JScrollPane(listOfEmp, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        listOfEmp.setVisibleRowCount(30);
         listOfEmp.setLayoutOrientation(JList.VERTICAL);
-        this.add(empScrollBar);
-
         listOfEmp.setBorder(new EmptyBorder(10, 10, 0, 10));
         listOfEmp.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listOfEmp.addMouseListener(new ListenForEmpList());
@@ -128,15 +128,15 @@ public class MapFrameOnGrid extends JFrame {
 //        constrains.weightx = 0;
 //        constrains.weighty = 0;
         constrains.fill = GridBagConstraints.HORIZONTAL;
-        this.getContentPane().add(listOfEmp, constrains);
+        this.add(empScroll, constrains);
 
         // LIST OF EVENTS
-
-        listOfEvents.setLayoutOrientation(JList.VERTICAL);
+        JScrollPane eventScroll = new JScrollPane(listOfEvents, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         listOfEvents.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        listOfEvents.setBorder(new EmptyBorder(10, 10, 0, 10));
         listOfEvents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listOfEvents.setVisibleRowCount(30);
+        listOfEvents.setBorder(new EmptyBorder(10, 10, 0, 10));
         listOfEvents.addListSelectionListener(new ListenForEventList());
 
         constrains.gridx = 6;
@@ -146,7 +146,8 @@ public class MapFrameOnGrid extends JFrame {
 //        constrains.weightx = 0;
 //        constrains.weighty = 0;
         constrains.fill = GridBagConstraints.HORIZONTAL;
-        this.add(listOfEvents, constrains);
+        this.add(eventScroll, constrains);
+
 
         this.setVisible(true);
     }
