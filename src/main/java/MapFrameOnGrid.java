@@ -111,8 +111,8 @@ public class MapFrameOnGrid extends JFrame {
         constrains.weighty = 0;
         this.add(loadBtn, constrains);
 
+
         // LIST OF EMPLOYEES
-//        String[] asd = {"qdasdwedasdasd", "awe", "awe", "awe", "awe", "awe"};
         JScrollPane empScrollBar = new JScrollPane();
         empScrollBar.setViewportView(listOfEmp);
         listOfEmp.setLayoutOrientation(JList.VERTICAL);
@@ -128,18 +128,17 @@ public class MapFrameOnGrid extends JFrame {
 //        constrains.weightx = 0;
 //        constrains.weighty = 0;
         constrains.fill = GridBagConstraints.HORIZONTAL;
-        this.add(listOfEmp, constrains);
+        this.getContentPane().add(listOfEmp, constrains);
 
         // LIST OF EVENTS
-        JScrollPane eventScrollBar = new JScrollPane();
-        eventScrollBar.setViewportView(listOfEvents);
+
         listOfEvents.setLayoutOrientation(JList.VERTICAL);
-        this.add(eventScrollBar);
 
         listOfEvents.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         listOfEvents.setBorder(new EmptyBorder(10, 10, 0, 10));
         listOfEvents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listOfEvents.addListSelectionListener(new ListenForEventList());
+
         constrains.gridx = 6;
         constrains.gridy = 3;
         constrains.gridwidth = 2;
